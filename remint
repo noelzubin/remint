@@ -61,6 +61,21 @@ CUSTOM=""           # Add any extra Remind arguments you may need here.
 
 # Initialization
 sleep 0.1 # Give the terminal some time to spawn if not already opened
+
+# Check if running on macOS (Darwin) and set up date command
+if [[ "$(uname)" == "Darwin" ]]; then
+    if command -v gdate >/dev/null 2>&1; then
+        # Use function instead of alias as aliases don't work in non-interactive shells
+        date() {
+            gdate "$@"
+        }
+    else
+        echo "Error: GNU date (gdate) is required on macOS. Please install with 'brew install coreutils'."
+        echo "Run: brew install coreutils"
+        exit 1
+    fi
+fi
+
 REF=$(date "+%Y-%m-%d")
 WSPAN=$WEEKSPAN
 MSPAN=$MONTHSPAN
